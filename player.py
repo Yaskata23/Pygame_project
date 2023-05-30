@@ -8,12 +8,13 @@ class Player:
         self.game = game
         self.x, self.y = PLAYER_POS
         self.angle = PLAYER_ANGLE
+        self.speed = PLAYER_SPEED
 
     def movement(self):
         sin_a = math.sin(self.angle)
         cos_a = math.cos(self.angle)
         dx, dy = 0, 0
-        speed = PLAYER_SPEED * self.game.delta_time
+        speed = self.speed * self.game.delta_time
         speed_sin = speed * sin_a
         speed_cos = speed * cos_a
 
@@ -30,6 +31,10 @@ class Player:
         if keys[pg.K_d]:
             dx += -speed_sin
             dy += speed_cos
+        if keys[pg.K_LSHIFT]:
+            self.speed = PLAYER_SPEED_SLOW
+        else:
+            self.speed = PLAYER_SPEED
 
         self.check_wall_collision(dx, dy)
 
