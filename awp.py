@@ -9,7 +9,7 @@ class Awp(AnimatedSprite):
         # Add inspect images folder path
         self.inspect_path = 'resources/sprites/weapon/awp/awp_inspect'
         # Load inspect images
-        self.inspect_images = self.get_images(self.inspect_path, scale=0.4)
+        self.inspect_images = self.get_images(self.inspect_path, scale=2.3)
         # Set initial inspect image
         self.inspect_image = self.inspect_images[0]
         # Set inspect animation parameters
@@ -27,12 +27,14 @@ class Awp(AnimatedSprite):
         if self.reloading:
             self.game.player.shot = False
             if self.animation_trigger:
-                self.images.rotate()
+                self.images.rotate(1)
                 self.image = self.images[0]
                 self.frame_counter += 1
                 if self.frame_counter == self.num_images:
                     self.reloading = False
                     self.frame_counter = 0
+                    self.inspecting = False  # Stop inspect animation on shot
+                    
     
     def inspect(self):
         if not self.inspecting:
@@ -44,7 +46,7 @@ class Awp(AnimatedSprite):
     def animate_inspect(self):
         if self.inspecting:
             if self.animation_trigger:
-                self.inspect_images.rotate()
+                self.inspect_images.rotate(1)
                 self.inspect_image = self.inspect_images[0]
                 self.inspect_frame_counter += 1
                 if self.inspect_frame_counter == self.inspect_num_images:

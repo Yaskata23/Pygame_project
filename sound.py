@@ -13,4 +13,5 @@ class Sound:
         self.player_pain = pg.mixer.Sound(self.path + 'player_pain.wav')
         self.awp_shot = pg.mixer.Sound(self.path + 'awp_shot.mp3')
         self.theme = pg.mixer.music.load(self.path + 'theme.mp3')
+        self.sawed_off_shot = pg.mixer.Sound(self.path + 'sawed_off_shot.mp3')
         pg.mixer.music.set_volume(1)

@@ -45,7 +45,7 @@ class Player:
         if event.type == pg.MOUSEBUTTONDOWN:
             if self.game.current_weapon == "shotgun":
                 if event.button == 1 and not self.shot and not self.game.shotgun.reloading:
-                    self.game.sound.shotgun.play()
+                    self.game.sound.sawed_off_shot.play()
                     self.shot = True
                     self.game.shotgun.reloading = True
             if self.game.current_weapon == "awp":
