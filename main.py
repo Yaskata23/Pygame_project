@@ -7,7 +7,8 @@ from raycasting import *
 from object_renderer import *
 from sprite_object import *
 from object_handler import *
-from weapon import *
+from shotgun import *
+from awp import *
 from sound import *
 from pathfinding import *
 
@@ -21,6 +22,7 @@ class Game:
         self.clock = pg.time.Clock()
         self.delta_time = 1
         self.global_trigger = False
+        self.current_weapon = "shotgun"
         self.global_event = pg.USEREVENT + 0
         pg.time.set_timer(self.global_event, 40)
         self.new_game()
@@ -31,7 +33,8 @@ class Game:
         self.object_renderer = ObjectRenderer(self)
         self.raycasting = RayCasting(self)
         self.object_handler = ObjectHandler(self)
-        self.weapon = Weapon(self)
+        self.shotgun = Shotgun(self)
+        self.awp = Awp(self)
         self.sound = Sound(self)
         self.pathfinding = PathFinding(self)
 
@@ -39,7 +42,8 @@ class Game:
         self.player.update()
         self.raycasting.update()
         self.object_handler.update()
-        self.weapon.update()
+        self.shotgun.update()
+        self.awp.update()
         pg.display.flip()
         self.delta_time = self.clock.tick(FPS)
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
@@ -47,7 +51,10 @@ class Game:
     def draw(self):
         # self.screen.fill('black')
         self.object_renderer.draw()
-        self.weapon.draw()
+        if self.current_weapon == "shotgun":
+            self.shotgun.draw()
+        if self.current_weapon == "awp":
+            self.awp.draw()
         # self.map.draw()
         # self.player.draw()
 
@@ -59,6 +66,16 @@ class Game:
                 sys.exit()
             elif event.type == self.global_event:
                 self.global_trigger = True
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_f:
+                    if self.current_weapon == "awp":
+                        self.awp.inspect()
+                    if self.current_weapon == "shotgun":
+                        self.shotgun.inspect()
+                if event.key == pg.K_2:
+                    self.current_weapon = "awp"
+                if event.key == pg.K_1:
+                    self.current_weapon = "shotgun"
             self.player.single_fire_event(event)
 
     def run(self):

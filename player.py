@@ -10,6 +10,7 @@ class Player:
         self.angle = PLAYER_ANGLE
         self.speed = PLAYER_SPEED
         self.shot = False
+        self.inspect = False
         self.health = PLAYER_MAX_HEALTH
         self.rel = 0
         self.health_recovery_delay = 700
@@ -42,10 +43,22 @@ class Player:
 
     def single_fire_event(self, event):
         if event.type == pg.MOUSEBUTTONDOWN:
-            if event.button == 1 and not self.shot and not self.game.weapon.reloading:
-                self.game.sound.shotgun.play()
-                self.shot = True
-                self.game.weapon.reloading = True
+            if self.game.current_weapon == "shotgun":
+                if event.button == 1 and not self.shot and not self.game.shotgun.reloading:
+                    self.game.sound.shotgun.play()
+                    self.shot = True
+                    self.game.shotgun.reloading = True
+            if self.game.current_weapon == "awp":
+                if event.button == 1 and not self.shot and not self.game.awp.reloading:
+                    self.game.sound.awp_shot.play()
+                    self.shot = True
+                    self.game.awp.reloading = True
+    
+    def inspect_gun_event(self, event):
+        if event.type == pg.K_f:
+            if event.button == 1 and not self.shot and not self.game.weapon.inspecting:
+                self.inspect = True
+                self.game.weapon.inspecting = True
 
     def movement(self):
         sin_a = math.sin(self.angle)
