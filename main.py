@@ -7,8 +7,7 @@ from raycasting import *
 from object_renderer import *
 from sprite_object import *
 from object_handler import *
-from shotgun import *
-from awp import *
+from weapon import *
 from sound import *
 from pathfinding import *
 

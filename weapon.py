@@ -1,27 +1,23 @@
 from spriteobjectforguns import *
 
-class Shotgun(AnimatedSprite):
-    def __init__(self, game, path='resources/sprites/weapon/shotgun/shotgun_shot/1.png', scale=2.3, animation_time=50, inspect_animation_time=70, pullout_animation_time=50):
+class Weapon(AnimatedSprite):
+    def __init__(self, game, path='resources/sprites/weapon/awp/awp_shot/0.png', scale=2.3, animation_time=100, inspect_animation_time=100, pullout_animation_time=45):
         super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
-        self.images = deque(
-            [pg.transform.smoothscale(img, (self.image.get_width() * scale, self.image.get_height() * scale))
-             for img in self.images])
+        self.images = self.get_images(self.path + '/gun_shot', scale=2.3)
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2, HEIGHT - self.images[0].get_height())
         self.reloading = False
         self.num_images = len(self.images)
         self.frame_counter = 0
-        self.damage = 50
+        self.damage = 1000
         #INSPECTING
-        self.inspect_path = 'resources/sprites/weapon/shotgun/shotgun_inspect'
-        self.inspect_images = self.get_images(self.inspect_path, scale=2.3)
+        self.inspect_images = self.get_images(self.path + '/gun_inspect', scale=2.3)
         self.inspect_image = self.inspect_images[0]
         self.inspect_animation_time = inspect_animation_time
         self.inspect_frame_counter = 0
         self.inspect_num_images = len(self.inspect_images)
         self.inspecting = False
         #PULLINGOUT
-        self.pullout_path = 'resources/sprites/weapon/shotgun/shotgun_pullout'
-        self.pullout_images = self.get_images(self.pullout_path, scale=2.3)
+        self.pullout_images = self.get_images(self.path + '/gun_pullout', scale=2.3)
         self.pullout_image = self.pullout_images[0]
         self.pullout_animation_time = pullout_animation_time
         self.pullout_frame_counter = 0
@@ -100,3 +96,17 @@ class Shotgun(AnimatedSprite):
         self.animate_shot()
         self.animate_inspect()
         self.animate_pullout()
+
+class Shotgun(Weapon):
+    def __init__(self, game, path='resources/sprites/weapon/shotgun/0.png', scale=2.3, animation_time = 50, inspect_animation_time = 70, pullout_animation_time = 50):
+        super().__init__(game, path, scale, animation_time, inspect_animation_time, pullout_animation_time)
+        self.damage = 50
+
+class Awp(Weapon):
+    def __init__(self, game, path='resources/sprites/weapon/awp/0.png', scale=2.3, animation_time = 100, inspect_animation_time = 100, pullout_animation_time = 45):
+        super().__init__(game, path, scale, animation_time, inspect_animation_time, pullout_animation_time)
+        self.damage = 1000
+        
+    
+
+     
