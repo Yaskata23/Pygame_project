@@ -9,7 +9,7 @@ class Shotgun(AnimatedSprite):
         # Add inspect images folder path
         self.inspect_path = 'resources/sprites/weapon/shotgun/shotgun_inspect'
         # Load inspect images
-        self.inspect_images = self.get_images(self.inspect_path, scale=2.3)
+        self.inspect_images = self.get_images(self.inspect_path, scale=2.1)
         # Set initial inspect image
         self.inspect_image = self.inspect_images[0]
         # Set inspect animation parameters
@@ -21,7 +21,7 @@ class Shotgun(AnimatedSprite):
         self.reloading = False
         self.num_images = len(self.images)
         self.frame_counter = 0
-        self.damage = 1000
+        self.damage = 50
 
     def animate_shot(self):
         if self.reloading:
