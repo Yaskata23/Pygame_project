@@ -53,6 +53,19 @@ class AnimatedSprite(SpriteObject):
                 if time_now - self.animation_time_prev > self.pullout_animation_time:
                     self.animation_time_prev = time_now
                     self.animation_trigger = True
+        if self.game.current_weapon == "deagle":
+            if self.game.deagle.reloading == True:
+                if time_now - self.animation_time_prev > self.animation_time:
+                    self.animation_time_prev = time_now
+                    self.animation_trigger = True
+            if self.game.deagle.inspecting == True:
+                if time_now - self.animation_time_prev > self.inspect_animation_time:
+                    self.animation_time_prev = time_now
+                    self.animation_trigger = True
+            if self.game.deagle.pullingout == True:
+                if time_now - self.animation_time_prev > self.pullout_animation_time:
+                    self.animation_time_prev = time_now
+                    self.animation_trigger = True
             
     
 

@@ -24,6 +24,11 @@ class Weapon(AnimatedSprite):
         self.pullout_num_images = len(self.pullout_images)
         self.pullingout = False
 
+    def shoot(self):
+        if not self.reloading:
+            self.reloading = True
+            self.animation_time_prev = pg.time.get_ticks()
+
     def animate_shot(self):
         if self.reloading:
             self.game.player.shot = False
@@ -46,7 +51,7 @@ class Weapon(AnimatedSprite):
     def animate_inspect(self):
         if self.inspecting:
             if self.animation_trigger:
-                self.inspect_images.rotate(1)
+                self.inspect_images.rotate(-1)
                 self.inspect_image = self.inspect_images[0]
                 self.inspect_frame_counter += 1
                 if self.inspect_frame_counter == self.inspect_num_images:
@@ -107,6 +112,9 @@ class Awp(Weapon):
         super().__init__(game, path, scale, animation_time, inspect_animation_time, pullout_animation_time)
         self.damage = 1000
         
-    
+class Deagle(Weapon):
+    def __init__(self, game, path='resources/sprites/weapon/deagle/0.png', scale=2.3, animation_time = 70, inspect_animation_time = 90, pullout_animation_time = 40):
+        super().__init__(game, path, scale, animation_time, inspect_animation_time, pullout_animation_time)
+        self.damage = 40
 
      

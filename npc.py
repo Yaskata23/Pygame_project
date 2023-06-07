@@ -77,6 +77,8 @@ class NPC(AnimatedSprite):
                     self.health -= self.game.shotgun.damage
                 if self.game.current_weapon == "awp":
                     self.health -= self.game.awp.damage
+                if self.game.current_weapon == "deagle":
+                    self.health -= self.game.deagle.damage
                 self.check_health()
 
     def check_health(self):

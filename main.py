@@ -34,6 +34,7 @@ class Game:
         self.object_handler = ObjectHandler(self)
         self.shotgun = Shotgun(self)
         self.awp = Awp(self)
+        self.deagle = Deagle(self)
         self.sound = Sound(self)
         self.pathfinding = PathFinding(self)
 
@@ -43,6 +44,7 @@ class Game:
         self.object_handler.update()
         self.shotgun.update()
         self.awp.update()
+        self.deagle.update()
         pg.display.flip()
         self.delta_time = self.clock.tick(FPS)
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
@@ -54,6 +56,8 @@ class Game:
             self.shotgun.draw()
         if self.current_weapon == "awp":
             self.awp.draw()
+        if self.current_weapon == "deagle":
+            self.deagle.draw()
         # self.map.draw()
         # self.player.draw()
 
@@ -71,8 +75,11 @@ class Game:
                         self.awp.inspect()
                     if self.current_weapon == "shotgun":
                         self.shotgun.inspect()
+                    if self.current_weapon == "deagle":
+                        self.deagle.inspect()
                 elif event.key == pg.K_2:
                     self.shotgun.inspecting = False
+                    self.deagle.inspecting = False
                     self.awp.pullout()
                     self.sound.awp_pullout.play()
                     if self.current_weapon != "awp":
@@ -80,10 +87,18 @@ class Game:
                         self.shotgun.inspecting = False
                 elif event.key == pg.K_1:
                     self.awp.inspecting = False
+                    self.deagle.inspecting = False
                     self.shotgun.pullout()
                     self.sound.sawed_off_pullout.play()
                     if self.current_weapon != "shotgun":
                         self.current_weapon = "shotgun"
+                elif event.key == pg.K_3:
+                    self.awp.inspecting = False
+                    self.shotgun.inspecting = False
+                    self.deagle.pullout()
+                    if self.current_weapon != "deagle":
+                        self.current_weapon = "deagle"
+
             self.player.single_fire_event(event)
 
 
