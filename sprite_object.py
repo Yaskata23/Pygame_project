@@ -61,7 +61,6 @@ class AnimatedSprite(SpriteObject):
         self.images = self.get_images(self.path)
         self.animation_time_prev = pg.time.get_ticks()
         self.animation_trigger = False
-
     def update(self):
         super().update()
         self.check_animation_time()

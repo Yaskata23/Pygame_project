@@ -72,15 +72,17 @@ class Game:
                         self.awp.inspect()
                     if self.current_weapon == "shotgun":
                         self.shotgun.inspect()
-                if event.key == pg.K_2:
-                    self.current_weapon = "awp"
-                    self.awp.inspecting = False  # Stop inspect animation when switching to shotgun
-                    self.shotgun.inspecting = False  # Reset inspect animation when switching to AWP
-                if event.key == pg.K_1:
-                    self.current_weapon = "shotgun"
-                    self.shotgun.inspecting = False  # Stop inspect animation when switching to AWP
-                    self.awp.inspecting = False  # Reset inspect animation when switching to shotgun
+                elif event.key == pg.K_2:
+                    if self.current_weapon != "awp":
+                        self.current_weapon = "awp"
+                        self.shotgun.inspecting = False  # Stop inspect animation when switching to AWP
+                elif event.key == pg.K_1:
+                    if self.current_weapon != "shotgun":
+                        self.current_weapon = "shotgun"
+                        self.shotgun.inspecting = False  # Stop inspect animation when switching to AWP
+                        self.awp.inspecting = False  # Reset inspect animation when switching to shotgun
             self.player.single_fire_event(event)
+
 
     def run(self):
         while True:

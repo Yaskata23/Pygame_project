@@ -17,6 +17,7 @@ class Awp(AnimatedSprite):
         self.inspect_frame_counter = 0
         self.inspect_num_images = len(self.inspect_images)
         self.inspecting = False
+
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2, HEIGHT - self.images[0].get_height())
         self.reloading = False
         self.num_images = len(self.images)
@@ -33,12 +34,11 @@ class Awp(AnimatedSprite):
                 if self.frame_counter == self.num_images:
                     self.reloading = False
                     self.frame_counter = 0
-                    self.inspecting = False  # Stop inspect animation on shot
-                    
-    
+                    # self.inspecting = False  # Stop inspect animation on shot
+                    self.inspect_frame_counter = 0
+
     def inspect(self):
-        if not self.inspecting:
-            # Start inspect animation
+        if not self.inspecting and not self.reloading:
             self.inspecting = True
             self.inspect_frame_counter = 0
             self.animation_time_prev = pg.time.get_ticks()  # Reset animation time
@@ -50,7 +50,6 @@ class Awp(AnimatedSprite):
                 self.inspect_image = self.inspect_images[0]
                 self.inspect_frame_counter += 1
                 if self.inspect_frame_counter == self.inspect_num_images:
-                    # Stop inspect animation
                     self.inspecting = False
                     self.inspect_frame_counter = 0
 
@@ -65,13 +64,7 @@ class Awp(AnimatedSprite):
         else:
             self.game.screen.blit(self.images[0], self.weapon_pos)
 
-
     def update(self):
         self.check_animation_time()
         self.animate_shot()
         self.animate_inspect()
-        if self.inspecting:
-            # Stop inspect animation after one full rotation
-            if self.inspect_frame_counter == self.inspect_num_images:
-                self.inspecting = False
-                self.inspect_frame_counter = 0

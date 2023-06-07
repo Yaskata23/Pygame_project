@@ -46,11 +46,13 @@ class Player:
             if self.game.current_weapon == "shotgun":
                 if event.button == 1 and not self.shot and not self.game.shotgun.reloading:
                     self.game.sound.sawed_off_shot.play()
+                    self.game.shotgun.inspecting = False
                     self.shot = True
                     self.game.shotgun.reloading = True
             if self.game.current_weapon == "awp":
                 if event.button == 1 and not self.shot and not self.game.awp.reloading:
                     self.game.sound.awp_shot.play()
+                    self.game.awp.inspecting = False
                     self.shot = True
                     self.game.awp.reloading = True
     
