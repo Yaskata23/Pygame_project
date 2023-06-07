@@ -73,14 +73,18 @@ class Game:
                     if self.current_weapon == "shotgun":
                         self.shotgun.inspect()
                 elif event.key == pg.K_2:
+                    self.shotgun.inspecting = False
+                    self.awp.pullout()
+                    self.sound.awp_pullout.play()
                     if self.current_weapon != "awp":
                         self.current_weapon = "awp"
-                        self.shotgun.inspecting = False  # Stop inspect animation when switching to AWP
+                        self.shotgun.inspecting = False
                 elif event.key == pg.K_1:
+                    self.awp.inspecting = False
+                    self.shotgun.pullout()
+                    self.sound.sawed_off_pullout.play()
                     if self.current_weapon != "shotgun":
                         self.current_weapon = "shotgun"
-                        self.shotgun.inspecting = False  # Stop inspect animation when switching to AWP
-                        self.awp.inspecting = False  # Reset inspect animation when switching to shotgun
             self.player.single_fire_event(event)
 
 

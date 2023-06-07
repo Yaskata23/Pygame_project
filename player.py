@@ -55,12 +55,6 @@ class Player:
                     self.game.awp.inspecting = False
                     self.shot = True
                     self.game.awp.reloading = True
-    
-    def inspect_gun_event(self, event):
-        if event.type == pg.K_f:
-            if event.button == 1 and not self.shot and not self.game.weapon.inspecting:
-                self.inspect = True
-                self.game.weapon.inspecting = True
 
     def movement(self):
         sin_a = math.sin(self.angle)

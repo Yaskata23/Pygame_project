@@ -1,27 +1,32 @@
-from sprite_object import *
+from spriteobjectforguns import *
 
 class Shotgun(AnimatedSprite):
-    def __init__(self, game, path='resources/sprites/weapon/shotgun/shotgun_shot/1.png', scale=2.1, animation_time=50):
+    def __init__(self, game, path='resources/sprites/weapon/shotgun/shotgun_shot/1.png', scale=2.3, animation_time=50, inspect_animation_time=70, pullout_animation_time=50):
         super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
         self.images = deque(
             [pg.transform.smoothscale(img, (self.image.get_width() * scale, self.image.get_height() * scale))
              for img in self.images])
-        # Add inspect images folder path
-        self.inspect_path = 'resources/sprites/weapon/shotgun/shotgun_inspect'
-        # Load inspect images
-        self.inspect_images = self.get_images(self.inspect_path, scale=2.1)
-        # Set initial inspect image
-        self.inspect_image = self.inspect_images[0]
-        # Set inspect animation parameters
-        self.inspect_animation_time = 100  # Adjust as needed
-        self.inspect_frame_counter = 0
-        self.inspect_num_images = len(self.inspect_images)
-        self.inspecting = False
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2, HEIGHT - self.images[0].get_height())
         self.reloading = False
         self.num_images = len(self.images)
         self.frame_counter = 0
         self.damage = 50
+        #INSPECTING
+        self.inspect_path = 'resources/sprites/weapon/shotgun/shotgun_inspect'
+        self.inspect_images = self.get_images(self.inspect_path, scale=2.3)
+        self.inspect_image = self.inspect_images[0]
+        self.inspect_animation_time = inspect_animation_time
+        self.inspect_frame_counter = 0
+        self.inspect_num_images = len(self.inspect_images)
+        self.inspecting = False
+        #PULLINGOUT
+        self.pullout_path = 'resources/sprites/weapon/shotgun/shotgun_pullout'
+        self.pullout_images = self.get_images(self.pullout_path, scale=2.3)
+        self.pullout_image = self.pullout_images[0]
+        self.pullout_animation_time = pullout_animation_time
+        self.pullout_frame_counter = 0
+        self.pullout_num_images = len(self.pullout_images)
+        self.pullingout = False
 
     def animate_shot(self):
         if self.reloading:
@@ -33,14 +38,13 @@ class Shotgun(AnimatedSprite):
                 if self.frame_counter == self.num_images:
                     self.reloading = False
                     self.frame_counter = 0
-                    self.inspecting = False  # Stop inspect animation on shot
-                    
-    
+                    self.inspect_frame_counter = 0
+
     def inspect(self):
-        if not self.inspecting:
-            # Start inspect animation
+        if not self.inspecting and not self.reloading:
             self.inspecting = True
-            self.inspect_frame_counter = 0
+            # self.inspect_images = self.get_images(self.inspect_path, scale=2.3)
+            # self.inspect_image = self.inspect_images[0]
             self.animation_time_prev = pg.time.get_ticks()  # Reset animation time
 
     def animate_inspect(self):
@@ -50,9 +54,25 @@ class Shotgun(AnimatedSprite):
                 self.inspect_image = self.inspect_images[0]
                 self.inspect_frame_counter += 1
                 if self.inspect_frame_counter == self.inspect_num_images:
-                    # Stop inspect animation
                     self.inspecting = False
                     self.inspect_frame_counter = 0
+
+    def pullout(self):
+        if not self.pullingout and not self.reloading:
+            self.pullingout = True
+            # self.pullout_images = self.get_images(self.pullout_path, scale=2.3)
+            # self.pullout_image = self.pullout_images[0]
+            self.animation_time_prev = pg.time.get_ticks() 
+
+    def animate_pullout(self):
+        if self.pullingout:
+            if self.animation_trigger:
+                self.pullout_images.rotate(-1)
+                self.pullout_image = self.pullout_images[0]
+                self.pullout_frame_counter += 1
+                if self.pullout_frame_counter == self.pullout_num_images:
+                    self.pullingout = False
+                    self.pullout_frame_counter = 0
 
     def draw(self):
         if self.inspecting:
@@ -62,16 +82,21 @@ class Shotgun(AnimatedSprite):
             inspect_y = HEIGHT - inspect_height
             inspect_pos = (inspect_x, inspect_y)
             self.game.screen.blit(self.inspect_image, inspect_pos)
+        elif self.pullingout:
+            pullout_width = self.pullout_image.get_width()
+            pullout_height = self.pullout_image.get_height()
+            pullout_x = HALF_WIDTH - pullout_width // 2
+            pullout_y = HEIGHT - pullout_height
+            pullout_pos = (pullout_x, pullout_y)
+            self.game.screen.blit(self.pullout_image, pullout_pos)
         else:
+            self.inspect_image = self.inspect_images[0]
+            self.inspect_frame_counter += 1
+            self.inspecting = False
             self.game.screen.blit(self.images[0], self.weapon_pos)
-
 
     def update(self):
         self.check_animation_time()
         self.animate_shot()
         self.animate_inspect()
-        if self.inspecting:
-            # Stop inspect animation after one full rotation
-            if self.inspect_frame_counter == self.inspect_num_images:
-                self.inspecting = False
-                self.inspect_frame_counter = 0
+        self.animate_pullout()
